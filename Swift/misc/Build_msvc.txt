@@ -1,0 +1,292 @@
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// INSTALL PACKAGES
+/// 
+Install cmake-3.5.2-win32-x86.exe
+
+Install Python 2.7.11.msi
+
+Install libxml2-2.9.3-win32-x86_64.7z
+
+Install pkg-config_0.26-1_win32.zip
+
+  http://stackoverflow.com/questions/1710922/how-to-install-pkg-config-in-windows
+  http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.26-1_win32.zip
+  http://ftp.gnome.org/pub/gnome/binaries/win32/glib/2.28/glib_2.28.8-1_win32.zip
+  http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip
+
+  //??  set PKG_CONFIG_PATH=c:\pkg-config\conf
+
+Install ICU
+  http://site.icu-project.org/download/56#TOC-ICU4C-Download
+  icu4c-56_1-Win64-msvc10.zip
+ 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// BUILD LIBRARIES AND CLANG FOR SWIFT
+///   
+set PATH=%PATH%;C:\Program Files (x86)\CMake\bin
+set WORKDIR=c:\work\swift_msvc
+
+// Build CMARK
+mkdir %WORKDIR%\build\firsttime\cmark
+cd %WORKDIR%\build\firsttime\cmark
+cmake -G "Visual Studio 14 2015 Win64" -D CMAKE_BUILD_TYPE=RELEASE ..\..\..\cmark
+
+// Build LLVM with CLANG
+cd %WORKDIR%\llvm\tools
+mklink /d clang ..\..\clang
+
+mkdir %WORKDIR%\build\firsttime\llvm
+cd %WORKDIR%\build\firsttime\llvm
+cmake -G "Visual Studio 14 2015 Win64" -D CMAKE_BUILD_TYPE=RELEASE ..\..\..\llvm
+
+"c:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" /p:Configuration=Release ALL_BUILD.vcxproj 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// INSTALL CLANG
+/// 
+  Copy %WORKDIR%\build\firsttime\llvm\Release\bin\clang.exe to
+    cl.exe, clang.exe in
+    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\Clang 3.9\bin\x86
+  
+  Copy directory %WORKDIR%\build\firsttime\llvm\Release\lib\clang\3.9.0\include to
+    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\Clang 3.9\include
+    
+  Copy %WORKDIR%\build\firsttime\llvm\Release\bin\libclang.lib to
+    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\Clang 3.9\lib\amd64
+
+  Copy %WORKDIR%/swift/misc/v140_clang_3_9_swift to 
+    C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Platforms\x64\PlatformToolsets\v140_clang_3_9_swift
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// BUILD SWIFT
+/// 
+mkdir %WORKDIR%\build\firsttime\swift
+set PATH=%WORKDIR%\build\firsttime\llvm\release\bin;%PATH%
+cd %WORKDIR%\build\firsttime\swift
+
+cmake -Tv140_clang_3_9_swift -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DLIBXML2_LIBRARIES=c:\libxml2\lib\libxml2.a  -DLIBXML2_INCLUDE_DIR=c:\libxml2\include  -DPKG_CONFIG_EXECUTABLE=c:\pkg-config\bin\pkg-config.exe -DUUID_INCLUDE_DIR=c:\uuid\include -DUUID_LIBRARY=c:\uuid\lib\uuid.lib -DICU_UC_INCLUDE_DIR=c:\icu\include -DICU_UC_LIBRARIES=c:\icu\lib64\icuuc.lib -DICU_I18N_INCLUDE_DIR=c:\icu\include -DICU_I18N_LIBRARIES=c:\icu\lib64\icuin.lib -DSWIFT_INCLUDE_DOCS=FALSE -DSWIFT_PATH_TO_CMARK_BUILD=%WORKDIR%\build\firsttime\cmark -DSWIFT_PATH_TO_CMARK_SOURCE=%WORKDIR%\cmark ..\..\..\swift
+
+Cygwin64 Terminal (In Administrator Mode)
+cd c:/Work/swift_msvc/build/firsttime/swift
+sh ../../../swift/misc/patch_all.sh
+
+Following DLL's must be copied to %WORKDIR%/build/firsttime/swift/Release/bin
+  cmark.dll icudt56.dll icuin56.dll icuuc56.dll
+
+"c:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" /p:Configuration=Release ALL_BUILD.vcxproj 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// COMPILING Swift.obj
+///   
+**********************************************************************************
+*** CAUTION: To build Swift.obj, should use swiftc.exe built on Cygwin
+***          To use with static link, remove .pdata or rename .pdata to .qdata
+**********************************************************************************
+
+swiftc -c -sdk / -target x86_64-pc-windows-msvc -O -I C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64 -module-cache-path C:/Work/swift_msvc/build/firsttime/swift/Release/clang-module-cache -no-link-objc-runtime -nostdimport -parse-stdlib -module-name Swift -Xfrontend -group-info-path -Xfrontend C:/Work/swift_msvc/swift/stdlib/public/core/GroupInfo.json -Xfrontend -sil-serialize-all -module-link-name swiftCore -force-single-frontend-invocation -parse-as-library -emit-module -emit-module-path C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64/Swift.swiftmodule -o C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/windows/x86_64/Swift.obj C:/Work/swift_msvc/swift/stdlib/public/core/Algorithm.swift C:/Work/swift_msvc/swift/stdlib/public/core/ArrayBody.swift C:/Work/swift_msvc/swift/stdlib/public/core/ArrayBuffer.swift C:/Work/swift_msvc/swift/stdlib/public/core/ArrayBufferProtocol.swift C:/Work/swift_msvc/swift/stdlib/public/core/ArrayCast.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Arrays.swift C:/Work/swift_msvc/swift/stdlib/public/core/ArrayType.swift C:/Work/swift_msvc/swift/stdlib/public/core/Assert.swift C:/Work/swift_msvc/swift/stdlib/public/core/AssertCommon.swift C:/Work/swift_msvc/swift/stdlib/public/core/Bool.swift C:/Work/swift_msvc/swift/stdlib/public/core/Boolean.swift C:/Work/swift_msvc/swift/stdlib/public/core/BridgeObjectiveC.swift C:/Work/swift_msvc/swift/stdlib/public/core/BridgeStorage.swift C:/Work/swift_msvc/swift/stdlib/public/core/Builtin.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/BuiltinMath.swift C:/Work/swift_msvc/swift/stdlib/public/core/Character.swift C:/Work/swift_msvc/swift/stdlib/public/core/CocoaArray.swift C:/Work/swift_msvc/swift/stdlib/public/core/Collection.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/CollectionAlgorithms.swift C:/Work/swift_msvc/swift/stdlib/public/core/CompilerProtocols.swift C:/Work/swift_msvc/swift/stdlib/public/core/ContiguousArrayBuffer.swift C:/Work/swift_msvc/swift/stdlib/public/core/CString.swift C:/Work/swift_msvc/swift/stdlib/public/core/CTypes.swift C:/Work/swift_msvc/swift/stdlib/public/core/EmptyCollection.swift C:/Work/swift_msvc/swift/stdlib/public/core/ErrorType.swift C:/Work/swift_msvc/swift/stdlib/public/core/Existential.swift C:/Work/swift_msvc/swift/stdlib/public/core/Filter.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/FixedPoint.swift C:/Work/swift_msvc/swift/stdlib/public/core/FlatMap.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Flatten.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/FloatingPoint.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/FloatingPointOperations.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/FloatingPointParsing.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/HashedCollections.swift C:/Work/swift_msvc/swift/stdlib/public/core/Hashing.swift C:/Work/swift_msvc/swift/stdlib/public/core/HeapBuffer.swift C:/Work/swift_msvc/swift/stdlib/public/core/ImplicitlyUnwrappedOptional.swift C:/Work/swift_msvc/swift/stdlib/public/core/Index.swift C:/Work/swift_msvc/swift/stdlib/public/core/InputStream.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/IntegerArithmetic.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/IntegerParsing.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Interval.swift C:/Work/swift_msvc/swift/stdlib/public/core/Join.swift C:/Work/swift_msvc/swift/stdlib/public/core/LazyCollection.swift C:/Work/swift_msvc/swift/stdlib/public/core/LazySequence.swift C:/Work/swift_msvc/swift/stdlib/public/core/LifetimeManager.swift C:/Work/swift_msvc/swift/stdlib/public/core/ManagedBuffer.swift C:/Work/swift_msvc/swift/stdlib/public/core/Map.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Mirrors.swift C:/Work/swift_msvc/swift/stdlib/public/core/Misc.swift C:/Work/swift_msvc/swift/stdlib/public/core/ObjCMirrors.swift C:/Work/swift_msvc/swift/stdlib/public/core/Optional.swift C:/Work/swift_msvc/swift/stdlib/public/core/OptionSet.swift C:/Work/swift_msvc/swift/stdlib/public/core/OutputStream.swift C:/Work/swift_msvc/swift/stdlib/public/core/Pointer.swift C:/Work/swift_msvc/swift/stdlib/public/core/Policy.swift C:/Work/swift_msvc/swift/stdlib/public/core/Print.swift C:/Work/swift_msvc/swift/stdlib/public/core/Range.swift C:/Work/swift_msvc/swift/stdlib/public/core/RangeReplaceableCollection.swift C:/Work/swift_msvc/swift/stdlib/public/core/Reflection.swift C:/Work/swift_msvc/swift/stdlib/public/core/Repeat.swift C:/Work/swift_msvc/swift/stdlib/public/core/REPL.swift C:/Work/swift_msvc/swift/stdlib/public/core/Reverse.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Runtime.swift C:/Work/swift_msvc/swift/stdlib/public/core/Sequence.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/SequenceAlgorithms.swift C:/Work/swift_msvc/swift/stdlib/public/core/SequenceWrapper.swift C:/Work/swift_msvc/swift/stdlib/public/core/SetAlgebra.swift C:/Work/swift_msvc/swift/stdlib/public/core/ShadowProtocols.swift C:/Work/swift_msvc/swift/stdlib/public/core/Shims.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Slice.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Sort.swift C:/Work/swift_msvc/swift/stdlib/public/core/StaticString.swift C:/Work/swift_msvc/swift/stdlib/public/core/Stride.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringCharacterView.swift C:/Work/swift_msvc/swift/stdlib/public/core/String.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringBridge.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringBuffer.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringCore.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/StringInterpolation.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringLegacy.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringUnicodeScalarView.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringUTF16.swift C:/Work/swift_msvc/swift/stdlib/public/core/StringUTF8.swift C:/Work/swift_msvc/swift/stdlib/public/core/SwiftNativeNSArray.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/UnavailableStringAPIs.swift C:/Work/swift_msvc/swift/stdlib/public/core/Unicode.swift C:/Work/swift_msvc/swift/stdlib/public/core/UnicodeScalar.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/UnicodeTrie.swift C:/Work/swift_msvc/swift/stdlib/public/core/Unmanaged.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/UnsafeBufferPointer.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/UnsafePointer.swift C:/Work/swift_msvc/swift/stdlib/public/core/Availability.swift C:/Work/swift_msvc/swift/stdlib/public/core/CollectionOfOne.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/ExistentialCollection.swift C:/Work/swift_msvc/swift/stdlib/public/core/Mirror.swift C:/Work/swift_msvc/swift/stdlib/public/core/Process.swift C:/Work/swift_msvc/swift/stdlib/public/core/SliceBuffer.swift C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/8/Tuple.swift C:/Work/swift_msvc/swift/stdlib/public/core/VarArgs.swift C:/Work/swift_msvc/swift/stdlib/public/core/Zip.swift
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// LINKING libswiftCore.dll   
+/// (libswiftCore.dll = swiftRuntime.lib + swiftStdlibStubs.lib + Swift.obj)
+
+**********************************************************************************
+*** CAUTION: To build Swift.obj, should use swiftc.exe built on Cygwin
+**********************************************************************************
+
+cd c:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core
+
+dlltool -z allexp.orig.def --export-all-symbols ./windows/x86_64/Swift.obj ../../../Release/lib/swift/windows/x86_64/swiftRuntime.lib  ../../../Release/lib/swift/windows/x86_64/swiftStdlibStubs.lib
+
+python c:/Work/swift_msvc/swift/misc/trim_exp.py allexp.orig.def allexp.def
+
+(In VS2015 x64 Native Tool Command Prompt)
+link /ERRORREPORT:PROMPT /OUT:"C:\Work\swift_msvc\build\firsttime\swift\Release\lib\swift\windows\libswiftCore.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib/Release /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib/Release kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib ..\..\..\Release\lib\swift\windows\x86_64\swiftRuntime.lib ..\..\..\Release\lib\swift\windows\x86_64\swiftStdlibStubs.lib C:\icu\lib64\icuuc.lib C:\icu\lib64\icui18n.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:/Work/swift_msvc/build/firsttime/swift/Release/bin/swiftCore.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Work\swift_msvc\build\firsttime\swift\Release\lib\swift\windows\libswiftCore.lib" /MACHINE:X64  /machine:x64 /DLL C:\Work\swift_msvc\build\firsttime\swift\stdlib\public\core\windows\x86_64\Swift.obj /DEF:allexp.def /MERGE:.rdata=.rodata /IGNORE:4102,4197
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// LINKING SwiftOnoneSupport.dll
+
+cd c:/Work/swift_msvc/build/firsttime/swift/Release/bin
+
+**********************************************************************************
+*** CAUTION: To build SwiftOnoneSupport.obj, should use swiftc.exe built on MSVC
+***           To use with static link, remove .pdata or rename .pdata to .qdata
+**********************************************************************************
+swiftc -emit-ir -sdk / -target x86_64-pc-windows-msvc -O -I C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64 -module-cache-path C:/Work/swift_msvc/build/firsttime/swift/Release/clang-module-cache -no-link-objc-runtime -Xfrontend -sil-serialize-all -parse-stdlib -module-link-name swiftSwiftOnoneSupport -force-single-frontend-invocation -parse-as-library -emit-module -emit-module-path C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64/SwiftOnoneSupport.swiftmodule -o SwiftOnoneSupport.ll C:/Work/swift_msvc/swift/stdlib/public/SwiftOnoneSupport/SwiftOnoneSupport.swift
+
+python c:/Work/swift_msvc/swift/misc/inject_dllimport.py SwiftOnoneSupport.ll SwiftOnoneSupport.new.ll
+
+clang -c SwiftOnoneSupport.new.ll -o C:\Work\swift_msvc\build\firsttime\swift\stdlib\public\SwiftOnoneSupport\windows\x86_64\SwiftOnoneSupport.obj -mcmodel=large -target x86_64-pc-windows-msvc19.0.0
+
+cd c:/Work/swift_msvc/build/firsttime/swift/stdlib/public/SwiftOnoneSupport
+
+dlltool -z allexp.orig.def --export-all-symbols ../../../stdlib/public/SwiftOnoneSupport/windows/x86_64/SwiftOnoneSupport.obj
+
+python c:/Work/swift_msvc/swift/misc/trim_exp.py allexp.orig.def allexp.def
+
+(In VS2015 x64 Native Tool Command Prompt)
+link /ERRORREPORT:PROMPT /OUT:"C:\Work\swift_msvc\build\firsttime\swift\Release\lib\swift\windows\libswiftSwiftOnoneSupport.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib/Release kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib ..\..\..\Release\lib\swift\windows\libswiftCore.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:/Work/swift_msvc/build/firsttime/swift/Release/bin/libswiftSwiftOnoneSupport.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/libswiftSwiftOnoneSupport.lib" /MACHINE:X64 /DLL C:\Work\swift_msvc\build\firsttime\swift\stdlib\public\SwiftOnoneSupport\windows\x86_64\SwiftOnoneSupport.obj    /DEF:allexp.def msvcrt.lib /MERGE:.rdata=.rodata
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// COMPILE & LINK Hello (in static)
+/// -- Swift.obj made on Cygwin, remove .pdata (changed to .qdata)
+//  -- SwiftOnoneSupport.obj made on MSVC, remove .pdata (changed to .qdata)
+cd c:/Work/swift_msvc/build/firsttime/swift/Release/bin
+
+lib /out:libswiftCore.lib  ..\lib\swift\windows\x86_64\swiftRuntime.lib  ..\lib\swift\windows\x86_64\swiftStdlibStubs.lib C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/core/windows/x86_64/Swift.obj C:\icu\lib64\icuuc.lib C:\icu\lib64\icui18n.lib /IGNORE:4006,4221
+
+lib /out:libswiftSwiftOnoneSupport.lib C:\Work\swift_msvc\build\firsttime\swift\stdlib\public\SwiftOnoneSupport\windows\x86_64\SwiftOnoneSupport.obj
+
+swiftc -c Hello.swift -o Hello_static.obj
+OR swiftc -c Hello.swift -o Hello_static.obj -O
+OR swiftc -c Hello.swift -o Hello_static.obj -Onone
+
+link /out:hello_static.exe hello_static.obj libswiftCore.lib libswiftSwiftOnoneSupport.lib /MERGE:.rdata=.rodata /FORCE:MULTIPLE /IGNORE:4006,4049,4217
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// COMPILE & LINK Hello (in dynamic)
+/// 
+cd c:/Work/swift_msvc/build/firsttime/swift/Release/bin
+
+swiftc -emit-ir Hello.swift -o Hello.orig.ll
+OR swiftc -emit-ir Hello.swift -o Hello.orig.ll -O
+OR swiftc -emit-ir Hello.swift -o Hello.orig.ll -Onone
+
+python c:/Work/swift_msvc/swift/misc/inject_dllimport.py Hello.orig.ll Hello.ll
+
+clang -c hello.ll -o hello.obj -mcmodel=large -target x86_64-pc-windows-msvc19.0.0
+
+link /out:hello.exe hello.obj c:\Work\swift_msvc\build\firsttime\swift\Release\lib\swift\windows\libswiftCore.lib C:\icu\lib64\icuuc.lib C:\icu\lib64\icui18n.lib c:\Work\swift_msvc\build\firsttime\swift\Release\lib\swift\windows\libswiftSwiftOnoneSupport.lib /MERGE:.rdata=.rodata msvcrt.lib
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+******************************************************
+* vsproj processing
+
+  v (swift-demangle.exe)
+    (swift-ide-test.exe)  // libxml header needed
+  v (sil-opt.exe)
+  v (sil-extract.exe)
+  v  swift.exe
+  v (swift-llvm-opt.exe)
+  v (lldb-moduleimport-test.exe)
+  v  SwiftCore.dll
+  v  SwiftOnoneSupport.dll
+    (SwiftExperimental.dll)
+  v (SwiftPrivate.dll)
+     
+------------------
+
+it need?
+-DLLVM_DEFAULT_TARGET_TRIPLE=x86_64-windows-msvc
+-DLLVM_USE_CRT_RELEASE=MT 
+set CMAKE_INSTALL_PREFIX=$WORKDIR\build\firsttime\llvm
+//set LLVM_TARGETS_TO_BUILD=x86_64-unknown-windows-msvc
+
+set PATH=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\Clang 3.7\bin\x86;%PATH%
+
+
+* Libs/libuuid-devel      2.25.2-2
+*      /libicu-devel       56.1-1
+*      /libedit-devel      20130712-1
+v      /libxml2-devel      2.9.3-1
+      /libsqlite3-devel   3.9.2-1
+      /swig               3.0.7-1
+      /libncurses-devel   6.0-1.20151017
+v      /pkg-config         0.29-1
+      /libiconv-devel     1.14-3
+      
+
+=============================
+Linux CMAKE option
+
+/usr/bin/cmake -G Ninja -DCMAKE_C_COMPILER:PATH=/usr/bin/clang -DCMAKE_CXX_COMPILER:PATH=/usr/bin/clang++ '-DCMAKE_C_FLAGS= -fno-stack-protector' '-DCMAKE_CXX_FLAGS= -fno-stack-protector' -DCMAKE_BUILD_TYPE:STRING=Release -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE -DSWIFT_ANALYZE_CODE_COVERAGE:BOOL=FALSE -DSWIFT_STDLIB_BUILD_TYPE:STRING=Debug -DSWIFT_STDLIB_ASSERTIONS:BOOL=TRUE -DSWIFT_NATIVE_LLVM_TOOLS_PATH:STRING= -DSWIFT_NATIVE_CLANG_TOOLS_PATH:STRING= -DSWIFT_NATIVE_SWIFT_TOOLS_PATH:STRING= -DSWIFT_BUILD_TOOLS:BOOL=TRUE -DSWIFT_BUILD_STDLIB:BOOL=TRUE -DSWIFT_SERIALIZE_STDLIB_UNITTEST:BOOL=FALSE -DSWIFT_BUILD_SDK_OVERLAY:BOOL=TRUE -DSWIFT_BUILD_STATIC_STDLIB:BOOL=FALSE -DSWIFT_BUILD_PERF_TESTSUITE:BOOL=FALSE  -DSWIFT_INCLUDE_TESTS:BOOL=TRUE -DSWIFT_INSTALL_COMPONENTS:STRING= -DSWIFT_EMBED_BITCODE_SECTION:BOOL=FALSE -DSWIFT_DARWIN_XCRUN_TOOLCHAIN:STRING=default -DSWIFT_AST_VERIFIER:BOOL=TRUE -DSWIFT_SIL_VERIFY_ALL:BOOL=FALSE -DSWIFT_RUNTIME_ENABLE_DTRACE:BOOL=FALSE -DSWIFT_RUNTIME_ENABLE_LEAK_CHECKER:BOOL=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr -DLLVM_CONFIG:PATH=/home/tinysun/Work/swift/build/Ninja-ReleaseAssert+stdlib-DebugAssert/llvm-linux-x86_64/bin/llvm-config         -DSWIFT_PATH_TO_CLANG_SOURCE:PATH=/home/tinysun/Work/swift/llvm/tools/clang -DSWIFT_PATH_TO_CLANG_BUILD:PATH=/home/tinysun/Work/swift/build/Ninja-ReleaseAssert+stdlib-DebugAssert/llvm-linux-x86_64 -DSWIFT_PATH_TO_LLVM_SOURCE:PATH=/home/tinysun/Work/swift/llvm -DSWIFT_PATH_TO_LLVM_BUILD:PATH=/home/tinysun/Work/swift/build/Ninja-ReleaseAssert+stdlib-DebugAssert/llvm-linux-x86_64 -DSWIFT_PATH_TO_CMARK_SOURCE:PATH=/home/tinysun/Work/swift/cmark -DSWIFT_PATH_TO_CMARK_BUILD:PATH=/home/tinysun/Work/swift/build/Ninja-ReleaseAssert+stdlib-DebugAssert/cmark-linux-x86_64 -DSWIFT_CMARK_LIBRARY_DIR:PATH=/home/tinysun/Work/swift/build/Ninja-ReleaseAssert+stdlib-DebugAssert/cmark-linux-x86_64/src /home/tinysun/Work/swift/swift
+
+
+===================================
+MS Compile option for my build clang 3.8.0 - msvc
+// captured from clang-c2 driver
+
+clang  -cc1 -triple x86_64-pc-windows-msvc19.0.0 -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -main-file-name once_flag_size.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -target-cpu x86-64 -momit-leaf-frame-pointer -v -dwarf-column-info -resource-dir "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\Clang 3.7\\bin\\x86\\..\\lib\\clang\\3.7.0" -internal-isystem "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\Clang 3.7\\bin\\x86\\..\\lib\\clang\\3.7.0\\include" -internal-isystem "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\INCLUDE" -internal-isystem "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\ATLMFC\\INCLUDE" -internal-isystem "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\ucrt" -internal-isystem "C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.6.1\\include\\um" -internal-isystem "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\shared" -internal-isystem "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\um" -internal-isystem "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\winrt" -std=c++11 -fdeprecated-macro -fdebug-compilation-dir "c:\\Work\\compiler_bug" -ferror-limit 19 -fmessage-length 120 -mstackrealign -fms-extensions -fms-compatibility -fms-compatibility-version=19 -fdelayed-template-parsing -fobjc-runtime=gnustep -fdiagnostics-show-option -fcolor-diagnostics -o "C:\\Users\\Han\\AppData\\Local\\Temp\\once_flag_size-2566aa.o" -x c++ once_flag_size.cpp
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// In Cygwin
+cd c:/Work/swift_msvc/build/firsttime/swift/stdlib/private/SwiftPrivate
+
+  create objfiles.txt  
+  -------------
+  C:\Work\swift_msvc\build\firsttime\swift\stdlib\private\SwiftPrivate\windows\x86_64\SwiftPrivate.obj
+
+  cmake -E __create_def  allexp.def objfiles.txt
+  또는 
+     dlltool -z allexp.def --export-all-symbols ./stdlib/private/SwiftPrivate/windows/x86_64/SwiftPrivate.obj
+     sed -e 's/"//g' -e 's/DATA$//' allexp.def > ttt.def; mv ttt.def allexp.def
+  
+// In VS2015 x64 Native Tool Command Prompt
+cd c:\Work\swift_msvc\build\firsttime\swift\stdlib\private\SwiftPrivate
+link.exe /ERRORREPORT:PROMPT /OUT:"C:\Work\swift_msvc\build\firsttime\swift\Release\bin\swiftSwiftPrivate.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib/Release /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib /LIBPATH:C:/Work/swift_msvc/build/firsttime/llvm/Release/lib/Release kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib ..\..\..\Release\lib\swift\windows\x86_64\swiftCore.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:/Work/swift_msvc/build/firsttime/swift/Release/bin/swiftSwiftPrivate.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64/swiftSwiftPrivate.lib" /MACHINE:X64  /machine:x64 /DLL C:\Work\swift_msvc\build\firsttime\swift\stdlib\private\SwiftPrivate\windows\x86_64\SwiftPrivate.obj /DEF:allexp.def msvcrt.lib
+
+=======================
+cd c:/Work/swift_msvc/build/firsttime/swift/Release/bin
+copy  swiftCore.dll  ..\lib\swift\windows\libswiftCore.dll
+copy  swiftSwiftOnoneSupport.dll  ..\lib\swift\windows\libswiftSwiftOnoneSupport.dll
+=======================
+
+
+
+////////////////////////////////////////////////////////
+/// Manually import -- NOT WORK
+///
+/// To add __imp_ prefix, edit the swiftc-generated *.ll and compile it to *.obj with clang
+swiftc -frontend -emit-ir -primary-file Hello.swift -target x86_64-pc-windows-msvc -disable-objc-interop -color-diagnostics -module-name Hello -o Hello.ll
+* Editing hello.ll to add __imp_ prefix   
+clang++ -c hello.ll -o hello.obj -mcmodel=large -target x86_64-pc-windows-msvc19.0.0
+
+link /out:hello.exe hello.obj "C:\Work\swift_msvc\build\firsttime\swift\Release\lib\swift\windows\x86_64\swiftCore.lib" /MERGE:.rdata=.rodata /force:multiple msvcrt.lib
+///////////////////////////////////
+
+
+/////////////////////////////////////////////
+/// Modify output of swiftc (edit llvm)
+///
+/// To remove duplicate symbol, edit the swiftc-generated *.ll and compile it to *.obj with clang
+swiftc -frontend -emit-ir -primary-file Hello.swift -target x86_64-pc-windows-msvc -disable-objc-interop -color-diagnostics -module-name Hello -o Hello.ll
+
+* Editing hello.ll to remove duplicate symbol
+    Replace 'define linkonce_odr' to 'declare' and remove function body
+    For variables, replace '(Var Name) = linkonce_odr' to '(Var Name) = external' and remove initializing with null
+clang++ -c hello.ll -o hello.obj -mcmodel=large -target x86_64-pc-windows-msvc19.0.0
+///////////////////////////////////
+
+
+///////////////////////////////////
+// For reference (from .vcxproj)
+swiftc -c -sdk / -target x86_64-pc-windows-msvc -O -I C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64 -module-cache-path C:/Work/swift_msvc/build/firsttime/swift/Release/clang-module-cache -no-link-objc-runtime -Xfrontend -sil-serialize-all -parse-stdlib -module-link-name swiftSwiftOnoneSupport -force-single-frontend-invocation -parse-as-library -emit-module -emit-module-path C:/Work/swift_msvc/build/firsttime/swift/Release/lib/swift/windows/x86_64/SwiftOnoneSupport.swiftmodule -o C:/Work/swift_msvc/build/firsttime/swift/stdlib/public/SwiftOnoneSupport/windows/x86_64/SwiftOnoneSupport.obj C:/Work/swift_msvc/swift/stdlib/public/SwiftOnoneSupport/SwiftOnoneSupport.swift
+///////////////////////////////////
+
+
+/////////////////////////////////////////////////////////
+// Replace LINK.exe with mingw64's ld.exe -- NOT WORK
+// (it will solve import problem with auto-import feature)
+//
+// msvcr100.dll, msvcp100.dll, icuuc56.dll, icuin56.dll, 
+// msvcp140.dll, vcruntime140.dll, ucrtbase.dll, cryptbase.dll
+// kernelbase.dll, bcryptprimitives.dll, sechost.dll
+// kernel32.dll, msvcrt.dll, rpcrt4.dll, advapi32.dll, ntdll.dll
+
+ld -o hello.exe hello.obj  swiftCore.lib ..\lib\swift\windows\x86_64\swiftStdlibStubs.lib ..\lib\swift\windows\x86_64\swiftRuntime.lib  C:\icu\lib64\icui18n.lib C:\icu\lib64\icuuc.lib  "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64\msvcrt.lib"  "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64\msvcprt.lib"    "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64\vcruntime.lib" "c:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\ucrt\x64\ucrt.lib" "c:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64\kernel32.lib"
+==> searching creator for _7ios_base // ??_7ios_base@std@@6B@
+

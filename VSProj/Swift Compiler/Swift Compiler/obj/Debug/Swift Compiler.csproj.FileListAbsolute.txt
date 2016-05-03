@@ -1,0 +1,29 @@
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\bin\Debug\Swift Compiler.exe.config
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\bin\Debug\Swift Compiler.exe
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\bin\Debug\Swift Compiler.pdb
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.csprojResolveAssemblyReference.cache
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\MainWindow.g.cs
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\App.g.cs
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler_MarkupCompile.cache
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler_MarkupCompile.lref
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\MainWindow.baml
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.g.resources
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift_Compiler.Properties.Resources.resources
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.csproj.GenerateResource.Cache
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.exe
+f:\documents\visual studio 2015\Projects\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.pdb
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Debug\Garlic.dll
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\MainWindow.g.cs
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\App.g.cs
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\MainWindow.baml
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift_Compiler.Properties.Resources.resources
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.csproj.GenerateResource.Cache
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift Compiler.csprojResolveAssemblyReference.cache
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Debug\Swift for Windows.exe.config
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Debug\Swift for Windows.exe
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Debug\Swift for Windows.pdb
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift for Windows_MarkupCompile.cache
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift for Windows_MarkupCompile.lref
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift for Windows.g.resources
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift for Windows.exe
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Debug\Swift for Windows.pdb

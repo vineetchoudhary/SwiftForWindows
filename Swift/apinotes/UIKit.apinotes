@@ -1,0 +1,8 @@
+---
+Name: UIKit
+Classes:
+- Name: UIPrintInfo
+  Methods:
+  - Selector: printInfo
+    MethodKind: Class
+    FactoryAsInit: C

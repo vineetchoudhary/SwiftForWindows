@@ -1,0 +1,48 @@
+﻿<Window x:Class="Swift_Compiler.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Swift_Compiler"
+        mc:Ignorable="d"
+        Title="Swift for Windows" Height="600" MaxHeight="600" MinHeight="600" Width="1000" MaxWidth="1000" MinWidth="100">
+    <Grid>
+        <!--Compiler-->
+        <GroupBox x:Name="groupBoxCompiler" Header="Compiler" Margin="10,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="138" FontSize="18.667" BorderBrush="#FFFC3524"/>
+        <TextBox x:Name="textBoxSelectedFile" HorizontalAlignment="Left" Height="35" Margin="30,42,0,0" TextWrapping="Wrap" Text="Select swift file to compile or run" VerticalAlignment="Top" Width="700" FontSize="21.333" IsEnabled="False" MouseDoubleClick="textBoxSelectedFile_MouseDoubleClick" BorderBrush="#FF009FFF"/>
+        <Button x:Name="buttonSelectFile" Content="Select File" HorizontalAlignment="Right" Margin="10,42,30,0" VerticalAlignment="Top" Width="220" Height="35" FontSize="18.667" Click="buttonSelectFile_Click" BorderBrush="#FF009FFF"/>
+        <Button x:Name="buttonCompile" Content="Compile" Margin="30,90,0,0" VerticalAlignment="Top" Width="460" Height="40" Click="buttonCompile_Click" FontSize="26.667" HorizontalAlignment="Left" BorderBrush="#FF009FFF"/>
+        <Button x:Name="buttonRun" Content="Run" HorizontalAlignment="Right" Margin="10,90,30,0" VerticalAlignment="Top" Width="460" Height="40" Click="buttonRun_Click" FontSize="26.667" BorderBrush="#FF009FFF"/>
+
+        <!--Compiler Settings-->
+        <GroupBox x:Name="groupBoxSetting" Header="Compiler Settings" Margin="10,150,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="150" BorderBrush="#FFFC3524" FontSize="18.667" >
+
+        </GroupBox>
+        <Button x:Name="buttonResetSetting" Content="Reset Settings" HorizontalAlignment="Right" VerticalAlignment="Top" Width="79" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="#FF3399FF" HorizontalContentAlignment="Right" Margin="0,180,33,0" Click="buttonResetSetting_Click"/>
+        <Label x:Name="labelHint" Content="* double click on text field to change settings values" HorizontalAlignment="Left" Margin="20,180,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label" Content="VC++ for VS2015" ToolTip="Visual C++ Redistributable for Visual Studio 2015" HorizontalAlignment="Left" Margin="20,205,0,0" VerticalAlignment="Top" FontSize="18.667"/>
+        <ComboBox x:Name="comboBoxProcessor" SelectedValuePath="Content" Text="Processor" ToolTip="Select Processor Type" HorizontalAlignment="Right" Margin="628,207,30,0" VerticalAlignment="Top" Width="220" BorderBrush="#FF009FFF" Height="30" FontSize="16" SelectionChanged="comboBoxProcessor_SelectionChanged">
+            <ComboBoxItem Name="x86">x86</ComboBoxItem>
+            <ComboBoxItem Name="amd64">amd64</ComboBoxItem>
+            <ComboBoxItem Name="x64">x64</ComboBoxItem>
+            <ComboBoxItem Name="arm">arm</ComboBoxItem>
+            <ComboBoxItem Name="x86_arm">x86_arm</ComboBoxItem>
+            <ComboBoxItem Name="x86_amd64">x86_amd64</ComboBoxItem>
+            <ComboBoxItem Name="amd64_x86">amd64_x86</ComboBoxItem>
+            <ComboBoxItem Name="amd64_arm">amd64_arm</ComboBoxItem>
+        </ComboBox>
+        <TextBox x:Name="textBoxVCPPVS" HorizontalAlignment="Left" Height="30" Margin="200,207,0,0" TextWrapping="Wrap" Text="Visual C++ Redistributable for Visual Studio 2015" VerticalAlignment="Top" Width="530" FontSize="18" BorderBrush="#FF009FFF" MouseDoubleClick="textBoxVCPPVS_MouseDoubleClick" IsReadOnly="True"/>
+        <Label x:Name="label_Copy" Content="Swift Compiler" ToolTip="Swift Compiler" HorizontalAlignment="Left" Margin="20,252,0,0" VerticalAlignment="Top" FontSize="18.667"/>
+        <TextBox x:Name="textBoxSwiftCompiler" HorizontalAlignment="Left" Height="30" Margin="200,255,0,0" TextWrapping="Wrap" Text="Swift Compiler" VerticalAlignment="Top" Width="762" FontSize="18" BorderBrush="#FF009FFF" MouseDoubleClick="textBoxSwiftCompiler_MouseDoubleClick" IsReadOnly="True"/>
+
+        <!--Compiler Log-->
+        <GroupBox x:Name="groupBoxLogs" Header="Logs" Margin="10,0,10,40" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="210" BorderBrush="#FFFC3524" FontSize="18.667" >
+            <ScrollViewer>
+                <TextBlock x:Name="textBlockLog" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" FontSize="14.667" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+            </ScrollViewer>
+        </GroupBox>
+        <Button x:Name="buttonProjectNews" Content="Project Latest News" Margin="8,0,0,8" VerticalAlignment="Bottom" Width="110" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="#FF3399FF" HorizontalAlignment="Left" Click="buttonProjectNews_Click"/>
+        <Button x:Name="buttonProjectWebsite" Content="Project Website" Margin="0,0,11,8" VerticalAlignment="Bottom" Width="91" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="#FF3399FF" HorizontalAlignment="Right" Click="buttonProjectWebsite_Click"/>
+        <Button x:Name="buttonProjectHelp" Content="Help" Margin="0,0,0,8" VerticalAlignment="Bottom" Width="28" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="#FF3399FF" HorizontalAlignment="Center" Click="buttonProjectHelp_Click"/>
+    </Grid>
+</Window>

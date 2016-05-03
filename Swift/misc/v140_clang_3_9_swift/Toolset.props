@@ -1,0 +1,95 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+
+  <PropertyGroup>
+    <ClangTarget>amd64-pc-windows-msvc</ClangTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Required for enabling Team Build for packaging Windows Store app projects -->
+    <OutDirWasSpecified Condition=" '$(OutDir)'!='' AND '$(OutDirWasSpecified)'=='' ">true</OutDirWasSpecified>
+    <OutDirWasSpecified Condition=" '$(OutDir)'=='' AND '$(OutDirWasSpecified)'=='' ">false</OutDirWasSpecified>
+
+    <IntDir Condition="'$(IntDir)'=='' AND '$(IntermediateOutputPath)'!=''">$(IntermediateOutputPath)</IntDir>
+    <IntDir Condition="'$(IntDir)'=='' AND '$(IntermediateOutputPath)'==''">$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(OutDir)'=='' AND '$(SolutionDir)' == ''">$(IntDir)</OutDir>
+    <OutDir Condition="'$(OutDir)'=='' AND '$(SolutionDir)' != ''">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.WindowsSDK.props" Condition="Exists('$(VCTargetsPath)\Microsoft.Cpp.WindowsSDK.props')"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Common.props" />
+  
+   <!-- This sets Swift Clang common defaults. -->
+  <PropertyGroup>
+    <MSVCErrorReport>true</MSVCErrorReport>
+    <ToolsetISenseIdentifier>Clang.Windows</ToolsetISenseIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VCClangInstallDir>$(VCInstallDir)Clang 3.9\</VCClangInstallDir>
+  </PropertyGroup>
+  
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <MSExtensions>true</MSExtensions>
+      <MSCompatibility>false</MSCompatibility>
+      <MSCompatibilityVersion></MSCompatibilityVersion>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  
+  <PropertyGroup>
+    <ExecutablePath Condition="'$(ExecutablePath)' == ''">$(VCClangInstallDir)bin\x86\amd64;$(VCClangInstallDir)bin\x86;$(VC_ExecutablePath_x64);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(FxCopDir);$(PATH);</ExecutablePath>
+    <IncludePath Condition="'$(IncludePath)' == ''">$(VCClangInstallDir)include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <ReferencePath Condition="'$(ReferencePath)' == ''">$(VC_ReferencesPath_x64);</ReferencePath>
+    <LibraryPath Condition="'$(LibraryPath)' == ''">$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <LibraryWPath Condition="'$(LibraryWPath)' == ''">$(WindowsSDK_MetadataPath);</LibraryWPath>
+    <SourcePath Condition="'$(SourcePath)' == ''">$(VC_SourcePath);</SourcePath>
+    <ExcludePath Condition="'$(ExcludePath)' == ''">$(VC_IncludePath);$(WindowsSDK_IncludePath);$(MSBuild_ExecutablePath);$(VC_LibraryPath_x64);</ExcludePath>
+    <DebugCppRuntimeFilesPath Condition="'$(DebugCppRuntimeFilesPath)' == ''">$(VCInstallDir)redist\Debug_NonRedist\x64</DebugCppRuntimeFilesPath>  
+  </PropertyGroup>
+
+  
+  <!-- This is intentially added after ImportAfter. -->
+  <Import Project="$(_PlatformFolder)Platform.Common.props" />
+  
+  <!-- This overrides some of the platform defaults. -->
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <ClangMode>true</ClangMode>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <DebugInformationFormat Condition="'$(UseDebugLibraries)' == 'true'">FullDebug</DebugInformationFormat>
+      <DebugInformationFormat Condition="'$(UseDebugLibraries)' != 'true'">LineNumber</DebugInformationFormat>
+      <PreprocessorDefinitions Condition="'$(UseDebugLibraries)' == 'true'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization Condition="'$(UseDebugLibraries)' == 'true'">Disabled</Optimization>
+      <Optimization Condition="'$(UseDebugLibraries)' != 'true'">Full</Optimization>
+      <StrictAliasing>false</StrictAliasing>
+      <ProgramDatabaseFileName>$(IntDir)</ProgramDatabaseFileName>
+      <OmitFramePointers Condition="'$(UseDebugLibraries)' == 'true'">false</OmitFramePointers>
+      <OmitFramePointers Condition="'$(UseDebugLibraries)' != 'true'">true</OmitFramePointers>
+      <ExceptionHandling>Disabled</ExceptionHandling>
+      <FunctionLevelLinking Condition="'$(UseDebugLibraries)' == 'true'">false</FunctionLevelLinking>
+      <FunctionLevelLinking Condition="'$(UseDebugLibraries)' != 'true'">true</FunctionLevelLinking>
+      <DataLevelLinking Condition="'$(UseDebugLibraries)' == 'true'">false</DataLevelLinking>
+      <DataLevelLinking Condition="'$(UseDebugLibraries)' != 'true'">true</DataLevelLinking>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <PositionIndependentCode>true</PositionIndependentCode>
+      <UseShortEnums>false</UseShortEnums>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CLanguageStandard>Default</CLanguageStandard>
+      <CppLanguageStandard>Default</CppLanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <ObjectFileName>$(IntDir)%(filename).obj</ObjectFileName>
+      <CompileAs>Default</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <Verbose>false</Verbose>
+      <EnablePREfast Condition="'%(ClCompile.EnablePREfast)' == ''">false</EnablePREfast>
+      <OmitFramePointers Condition="'%(ClCompile.OmitFramePointers)' == ''">false</OmitFramePointers>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <PrecompiledHeaderOutputFileDirectory>$(IntDir)</PrecompiledHeaderOutputFileDirectory>
+      <PrecompiledHeaderOutputFile></PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderCompileAs>CompileAsCpp</PrecompiledHeaderCompileAs>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+</Project>

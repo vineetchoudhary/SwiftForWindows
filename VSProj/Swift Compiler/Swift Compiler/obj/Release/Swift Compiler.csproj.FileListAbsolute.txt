@@ -1,0 +1,14 @@
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Release\Swift for Windows.exe.config
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Release\Swift for Windows.exe
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Release\Swift for Windows.pdb
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\bin\Release\Garlic.dll
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\MainWindow.g.cs
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\App.g.cs
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift for Windows_MarkupCompile.cache
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift for Windows_MarkupCompile.lref
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\MainWindow.baml
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift for Windows.g.resources
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift_Compiler.Properties.Resources.resources
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift Compiler.csproj.GenerateResource.Cache
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift for Windows.exe
+F:\ProjectsWorks\Visual Studio\Swift for Windows\Swift Compiler\Swift Compiler\obj\Release\Swift for Windows.pdb
