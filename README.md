@@ -1,5 +1,5 @@
 # Swift for Windows
-"Swift for Windows" is a free, open source tool that provide runtime environment for swift programming language to compile and run on Windows OS with GUI. - https://swiftforwindows.codeplex.com/
+"Swift for Windows" is a free, open source tool that provide runtime environment for swift programming language to compile and run on Windows OS with GUI.
 
 # System Requirement 
 
@@ -8,10 +8,10 @@
 
 # To use "Swift for Windows"
 Step 1: Create a swift language program in you favorite editor.
-![](https://www.codeplex.com/Download?ProjectName=swiftforwindows&DownloadId=1564858)
+![](https://github.com/vineetchoudhary/swiftforwindows/blob/master/screenshot/sfw.png)
 
 Step 2: Open "Swift for Windows" and follow these steps
-![](https://www.codeplex.com/Download?ProjectName=swiftforwindows&DownloadId=1566814)
+![](https://github.com/vineetchoudhary/swiftforwindows/blob/master/screenshot/sfw.gif)
 
 #Based On
 https://github.com/apple/swift/releases/tag/swift-DEVELOPMENT-SNAPSHOT-2016-04-12-a
