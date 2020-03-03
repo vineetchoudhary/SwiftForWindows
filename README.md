@@ -15,7 +15,7 @@ Step 2: Open "Swift for Windows" and follow these steps
 
 # Install Swift 3.0 or later 
 Read this tutorial, How to install swift 3.0 or later on Windows 10 -
-http://www.developerinsider.in/install-apple-swift-3-0-on-windows-10-anniversary-update/
+https://developerinsider.co/install-apple-swift-on-windows-10-subsystem-for-linux-wsl/
 
 # Based On
 https://github.com/apple/swift/releases/tag/swift-DEVELOPMENT-SNAPSHOT-2016-04-12-a
